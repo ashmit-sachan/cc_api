@@ -25,11 +25,12 @@ export default async (tableName, primaryKey) => {
         const getResult = await DDB.send(new GetItemCommand(param));
         if (getResult.Item) {
             console.log("Record retrieved successfully:", unmarshall(getResult.Item));
+            return unmarshall(getResult.Item);
         } else {
             console.log("Record not found.");
+            return false;
         }
 
-        return getResult;
     } catch (error) {
         console.error("Error retrieving record:", error);
     }

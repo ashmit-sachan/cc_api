@@ -1,3 +1,5 @@
+import fs from "fs/promises";
+
 export const generateID = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?`~';
 
@@ -16,4 +18,14 @@ export const generateID = () => {
     const randomString = generateRandomString(8);
 
     return `${timestamp}=|#${randomString}`;
+}
+
+// Function to read JSON data from a file
+export async function readJsonData(filePath) {
+    try {
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        return JSON.parse(fileContent);
+    } catch (error) {
+        console.error('Error reading JSON data:', error);
+    }
 }

@@ -1,6 +1,6 @@
 import {DDB} from "./DDBClient.js";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
+import { marshall } from "@aws-sdk/util-dynamodb"
 
 const getConfig = (exp) => {
     function generateFilters() {
@@ -32,10 +32,12 @@ const getConfig = (exp) => {
 
     const config = {
         TableName: exp.tableName,
-        IndexName: '_'+exp.key,
         KeyConditionExpression: exp.key+'=:'+exp.key,
         ExpressionAttributeValues: marshall(generateExpressionAttributeValues())
     }
+
+    if (!exp.pk)
+        config.IndexName = '_'+exp.key;
 
     if (exp.filter) {
         config.FilterExpression = generateFilters();
@@ -50,11 +52,10 @@ const getConfig = (exp) => {
 
     return config;
 }
-
-
-const searchRecords = async (config) => {
+export const searchRecords = async (config) => {
     try {
         const queryResult = await DDB.send(new QueryCommand(getConfig(config)));
+        console.log(queryResult);
         return queryResult;
     } catch (error) {
         console.error("Error searching records:", error);

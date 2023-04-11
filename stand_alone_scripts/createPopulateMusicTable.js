@@ -1,18 +1,7 @@
 import createTable from "../DDB/createTable.js";
-import fs from 'fs/promises';
 import createRecord from "../DDB/createRecord.js";
-import {generateID} from "./util.js";
+import {generateID, readJsonData} from "./util.js";
 
-
-// Function to read JSON data from a file
-async function readJsonData(filePath) {
-    try {
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        return JSON.parse(fileContent);
-    } catch (error) {
-        console.error('Error reading JSON data:', error);
-    }
-}
 
 /**
  * Create music Table
@@ -41,8 +30,8 @@ const musicTableConfig = {
                 throughput: 150
             },
             {
-                name: "year",
-                indexName: "_year",
+                name: "release_year",
+                indexName: "_release_year",
                 type: "N",
                 projection: "ALL",
                 throughput: 100
@@ -77,7 +66,8 @@ setTimeout(async () => {
 
     for (const dataIndex of data.songs) {
         dataIndex.id = generateID();
-        dataIndex.year = Number(dataIndex.year);
+        dataIndex.release_year = Number(dataIndex.year);
+        delete dataIndex['year'];
         const record = createRecord('music', dataIndex);
         console.log(record);
     }

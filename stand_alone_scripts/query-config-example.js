@@ -1,6 +1,7 @@
 
 const exp = {
     tableName: 'music',
+    pk: true,
     key: 'artist',
     value: 'Arcade Fire',
     filter: {

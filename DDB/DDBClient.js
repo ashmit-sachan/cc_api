@@ -16,6 +16,7 @@ dotenv.config();
 
 
 export const DDB = new DynamoDBClient({
+    // endpoint: "http://localhost:8000",
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
